@@ -1,10 +1,46 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "D:\\spg_Sem2_An4\\SPG_Proiect\\",
+  "WorkspaceRootPath": "D:\\Github\\OpenGL-Project---Spongebob\\SPG_Proiect\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{D5F024EE-FCB3-4F9B-9B44-4E40EA13EE2E}|SPG_Proiect\\SPG_Proiect.vcxproj|D:\\spg_Sem2_An4\\SPG_Proiect\\SPG_Proiect\\main.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "AbsoluteMoniker": "D:0:0:{D5F024EE-FCB3-4F9B-9B44-4E40EA13EE2E}|SPG_Proiect\\SPG_Proiect.vcxproj|D:\\Github\\OpenGL-Project---Spongebob\\SPG_Proiect\\SPG_Proiect\\main.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{D5F024EE-FCB3-4F9B-9B44-4E40EA13EE2E}|SPG_Proiect\\SPG_Proiect.vcxproj|solutionrelative:SPG_Proiect\\main.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D5F024EE-FCB3-4F9B-9B44-4E40EA13EE2E}|SPG_Proiect\\SPG_Proiect.vcxproj|D:\\Github\\OpenGL-Project---Spongebob\\SPG_Proiect\\SPG_Proiect\\texture.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{D5F024EE-FCB3-4F9B-9B44-4E40EA13EE2E}|SPG_Proiect\\SPG_Proiect.vcxproj|solutionrelative:SPG_Proiect\\texture.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D5F024EE-FCB3-4F9B-9B44-4E40EA13EE2E}|SPG_Proiect\\SPG_Proiect.vcxproj|D:\\Github\\OpenGL-Project---Spongebob\\SPG_Proiect\\SPG_Proiect\\texture.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{D5F024EE-FCB3-4F9B-9B44-4E40EA13EE2E}|SPG_Proiect\\SPG_Proiect.vcxproj|solutionrelative:SPG_Proiect\\texture.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D5F024EE-FCB3-4F9B-9B44-4E40EA13EE2E}|SPG_Proiect\\SPG_Proiect.vcxproj|D:\\Github\\OpenGL-Project---Spongebob\\SPG_Proiect\\SPG_Proiect\\skybox.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{D5F024EE-FCB3-4F9B-9B44-4E40EA13EE2E}|SPG_Proiect\\SPG_Proiect.vcxproj|solutionrelative:SPG_Proiect\\skybox.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D5F024EE-FCB3-4F9B-9B44-4E40EA13EE2E}|SPG_Proiect\\SPG_Proiect.vcxproj|D:\\Github\\OpenGL-Project---Spongebob\\SPG_Proiect\\SPG_Proiect\\skybox.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{D5F024EE-FCB3-4F9B-9B44-4E40EA13EE2E}|SPG_Proiect\\SPG_Proiect.vcxproj|solutionrelative:SPG_Proiect\\skybox.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D5F024EE-FCB3-4F9B-9B44-4E40EA13EE2E}|SPG_Proiect\\SPG_Proiect.vcxproj|D:\\Github\\OpenGL-Project---Spongebob\\SPG_Proiect\\SPG_Proiect\\terrain.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{D5F024EE-FCB3-4F9B-9B44-4E40EA13EE2E}|SPG_Proiect\\SPG_Proiect.vcxproj|solutionrelative:SPG_Proiect\\terrain.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D5F024EE-FCB3-4F9B-9B44-4E40EA13EE2E}|SPG_Proiect\\SPG_Proiect.vcxproj|D:\\Github\\OpenGL-Project---Spongebob\\SPG_Proiect\\SPG_Proiect\\terrain.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{D5F024EE-FCB3-4F9B-9B44-4E40EA13EE2E}|SPG_Proiect\\SPG_Proiect.vcxproj|solutionrelative:SPG_Proiect\\terrain.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D5F024EE-FCB3-4F9B-9B44-4E40EA13EE2E}|SPG_Proiect\\SPG_Proiect.vcxproj|D:\\Github\\OpenGL-Project---Spongebob\\SPG_Proiect\\SPG_Proiect\\camera.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{D5F024EE-FCB3-4F9B-9B44-4E40EA13EE2E}|SPG_Proiect\\SPG_Proiect.vcxproj|solutionrelative:SPG_Proiect\\camera.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D5F024EE-FCB3-4F9B-9B44-4E40EA13EE2E}|SPG_Proiect\\SPG_Proiect.vcxproj|D:\\Github\\OpenGL-Project---Spongebob\\SPG_Proiect\\SPG_Proiect\\camera.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{D5F024EE-FCB3-4F9B-9B44-4E40EA13EE2E}|SPG_Proiect\\SPG_Proiect.vcxproj|solutionrelative:SPG_Proiect\\camera.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D5F024EE-FCB3-4F9B-9B44-4E40EA13EE2E}|SPG_Proiect\\SPG_Proiect.vcxproj|D:\\Github\\OpenGL-Project---Spongebob\\SPG_Proiect\\SPG_Proiect\\stb_image.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{D5F024EE-FCB3-4F9B-9B44-4E40EA13EE2E}|SPG_Proiect\\SPG_Proiect.vcxproj|solutionrelative:SPG_Proiect\\stb_image.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     }
   ],
   "DocumentGroupContainers": [
@@ -14,17 +50,134 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 9,
           "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "stb_image.h",
+              "DocumentMoniker": "D:\\Github\\OpenGL-Project---Spongebob\\SPG_Proiect\\SPG_Proiect\\stb_image.h",
+              "RelativeDocumentMoniker": "SPG_Proiect\\stb_image.h",
+              "ToolTip": "D:\\Github\\OpenGL-Project---Spongebob\\SPG_Proiect\\SPG_Proiect\\stb_image.h",
+              "RelativeToolTip": "SPG_Proiect\\stb_image.h",
+              "ViewState": "AgIAAHIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2026-03-04T07:22:50.202Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "camera.cpp",
+              "DocumentMoniker": "D:\\Github\\OpenGL-Project---Spongebob\\SPG_Proiect\\SPG_Proiect\\camera.cpp",
+              "RelativeDocumentMoniker": "SPG_Proiect\\camera.cpp",
+              "ToolTip": "D:\\Github\\OpenGL-Project---Spongebob\\SPG_Proiect\\SPG_Proiect\\camera.cpp",
+              "RelativeToolTip": "SPG_Proiect\\camera.cpp",
+              "ViewState": "AgIAAEUAAAAAAAAAAAAAAEUAAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2026-02-25T10:28:22.28Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "camera.h",
+              "DocumentMoniker": "D:\\Github\\OpenGL-Project---Spongebob\\SPG_Proiect\\SPG_Proiect\\camera.h",
+              "RelativeDocumentMoniker": "SPG_Proiect\\camera.h",
+              "ToolTip": "D:\\Github\\OpenGL-Project---Spongebob\\SPG_Proiect\\SPG_Proiect\\camera.h",
+              "RelativeToolTip": "SPG_Proiect\\camera.h",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAYAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2026-02-25T10:28:12.503Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "terrain.cpp",
+              "DocumentMoniker": "D:\\Github\\OpenGL-Project---Spongebob\\SPG_Proiect\\SPG_Proiect\\terrain.cpp",
+              "RelativeDocumentMoniker": "SPG_Proiect\\terrain.cpp",
+              "ToolTip": "D:\\Github\\OpenGL-Project---Spongebob\\SPG_Proiect\\SPG_Proiect\\terrain.cpp",
+              "RelativeToolTip": "SPG_Proiect\\terrain.cpp",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2026-02-25T10:27:59.051Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "terrain.h",
+              "DocumentMoniker": "D:\\Github\\OpenGL-Project---Spongebob\\SPG_Proiect\\SPG_Proiect\\terrain.h",
+              "RelativeDocumentMoniker": "SPG_Proiect\\terrain.h",
+              "ToolTip": "D:\\Github\\OpenGL-Project---Spongebob\\SPG_Proiect\\SPG_Proiect\\terrain.h",
+              "RelativeToolTip": "SPG_Proiect\\terrain.h",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2026-02-25T10:27:31.326Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "skybox.cpp",
+              "DocumentMoniker": "D:\\Github\\OpenGL-Project---Spongebob\\SPG_Proiect\\SPG_Proiect\\skybox.cpp",
+              "RelativeDocumentMoniker": "SPG_Proiect\\skybox.cpp",
+              "ToolTip": "D:\\Github\\OpenGL-Project---Spongebob\\SPG_Proiect\\SPG_Proiect\\skybox.cpp",
+              "RelativeToolTip": "SPG_Proiect\\skybox.cpp",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAAABgAAAAvAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2026-02-25T10:27:13.784Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "skybox.h",
+              "DocumentMoniker": "D:\\Github\\OpenGL-Project---Spongebob\\SPG_Proiect\\SPG_Proiect\\skybox.h",
+              "RelativeDocumentMoniker": "SPG_Proiect\\skybox.h",
+              "ToolTip": "D:\\Github\\OpenGL-Project---Spongebob\\SPG_Proiect\\SPG_Proiect\\skybox.h",
+              "RelativeToolTip": "SPG_Proiect\\skybox.h",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAAcAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2026-02-25T10:26:14.313Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "texture.cpp",
+              "DocumentMoniker": "D:\\Github\\OpenGL-Project---Spongebob\\SPG_Proiect\\SPG_Proiect\\texture.cpp",
+              "RelativeDocumentMoniker": "SPG_Proiect\\texture.cpp",
+              "ToolTip": "D:\\Github\\OpenGL-Project---Spongebob\\SPG_Proiect\\SPG_Proiect\\texture.cpp",
+              "RelativeToolTip": "SPG_Proiect\\texture.cpp",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAlAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2026-02-25T10:25:56.502Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "texture.h",
+              "DocumentMoniker": "D:\\Github\\OpenGL-Project---Spongebob\\SPG_Proiect\\SPG_Proiect\\texture.h",
+              "RelativeDocumentMoniker": "SPG_Proiect\\texture.h",
+              "ToolTip": "D:\\Github\\OpenGL-Project---Spongebob\\SPG_Proiect\\SPG_Proiect\\texture.h",
+              "RelativeToolTip": "SPG_Proiect\\texture.h",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAApAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2026-02-25T10:25:36.985Z",
+              "EditorCaption": ""
+            },
             {
               "$type": "Document",
               "DocumentIndex": 0,
               "Title": "main.cpp",
-              "DocumentMoniker": "D:\\spg_Sem2_An4\\SPG_Proiect\\SPG_Proiect\\main.cpp",
+              "DocumentMoniker": "D:\\Github\\OpenGL-Project---Spongebob\\SPG_Proiect\\SPG_Proiect\\main.cpp",
               "RelativeDocumentMoniker": "SPG_Proiect\\main.cpp",
-              "ToolTip": "D:\\spg_Sem2_An4\\SPG_Proiect\\SPG_Proiect\\main.cpp",
+              "ToolTip": "D:\\Github\\OpenGL-Project---Spongebob\\SPG_Proiect\\SPG_Proiect\\main.cpp",
               "RelativeToolTip": "SPG_Proiect\\main.cpp",
-              "ViewState": "AgIAAAQBAAAAAAAAAAAAABYAAAAUAAAAAAAAAA==",
+              "ViewState": "AgIAAEUAAAAAAAAAAAAAAFYAAAATAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
               "WhenOpened": "2026-02-23T10:16:16.123Z",
               "EditorCaption": ""
