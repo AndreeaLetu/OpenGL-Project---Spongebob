@@ -5,21 +5,21 @@
 GLuint sandTexture;
 
 struct TerrainVertex {
-    float x, y, z;
-    float u, v;
+    float x, y, z; // position in 3d space 
+    float u, v; //position in 2d space 
 };
 
 std::vector<TerrainVertex> terrainData;
 std::vector<int> rowStart;
 std::vector<int> rowCount;
 
-std::vector<std::vector<float>> heightGrid;
+std::vector<std::vector<float>> heightGrid; // matrix for heights
 
 int mapSize = 100;
 float mapScale = 2.0f;
 
 void GenerateTerrain()
-{
+{   //Heightmap
     float texScale = 0.2f;
 
     heightGrid.resize(mapSize * 2 + 1, std::vector<float>(mapSize * 2 + 1, 0.0f));
@@ -39,6 +39,7 @@ void GenerateTerrain()
         }
     }
 
+    //traingle strips
     for (int z = -mapSize; z < mapSize; z++)
     {
         rowStart.push_back(terrainData.size());

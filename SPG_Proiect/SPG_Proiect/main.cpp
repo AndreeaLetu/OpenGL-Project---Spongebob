@@ -1,11 +1,12 @@
 #include <windows.h>
 #include <freeglut.h>
 #include <cmath>
-
+#include "model_loader.h"
 #include "texture.h"
 #include "skybox.h"
 #include "terrain.h"
 #include "camera.h"
+#include "world_objects.h"
 void Init()
 {
     glEnable(GL_DEPTH_TEST);
@@ -30,6 +31,9 @@ void Init()
     skyboxTex[5] = LoadTexture("nz.png.png");
     sandTexture = LoadTexture("sand.png");
     GenerateTerrain();
+    InitWorldElements();
+
+  
 }
 
 void Display()
@@ -53,7 +57,12 @@ void Display()
     DrawSkybox(600.0f);
     glPopMatrix();
 
-    DrawTerrain();
+    DrawTerrain();   // 1. Desenezi terenul (baza)
+    DrawAllRoads();  // 2. Desenezi drumurile (peste baz?)
+
+    // Apoi obiectele care stau PE drum
+    DrawStaticObjects();
+    DrawStreetLamps();
 
     glutSwapBuffers();
 }
@@ -83,6 +92,7 @@ int main(int argc, char** argv)
     glutKeyboardFunc(Keyboard);
     glutMouseFunc(MouseClick);
     glutMotionFunc(MouseMotion);
+    glutIdleFunc(UpdateCarMovement);
 
     glutMainLoop();
     return 0;

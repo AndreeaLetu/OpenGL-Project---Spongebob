@@ -1,11 +1,2 @@
-﻿  camera.cpp
-D:\Github\OpenGL-Project---Spongebob\SPG_Proiect\SPG_Proiect\camera.cpp(71,22): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
-D:\Github\OpenGL-Project---Spongebob\SPG_Proiect\SPG_Proiect\camera.cpp(72,22): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
-  terrain.cpp
-D:\Github\OpenGL-Project---Spongebob\SPG_Proiect\SPG_Proiect\terrain.cpp(44,44): warning C4267: 'argument': conversion from 'size_t' to '_Ty', possible loss of data
-D:\Github\OpenGL-Project---Spongebob\SPG_Proiect\SPG_Proiect\terrain.cpp(44,44): warning C4267:         with
-D:\Github\OpenGL-Project---Spongebob\SPG_Proiect\SPG_Proiect\terrain.cpp(44,44): warning C4267:         [
-D:\Github\OpenGL-Project---Spongebob\SPG_Proiect\SPG_Proiect\terrain.cpp(44,44): warning C4267:             _Ty=int
-D:\Github\OpenGL-Project---Spongebob\SPG_Proiect\SPG_Proiect\terrain.cpp(44,44): warning C4267:         ]
-  Generating Code...
+﻿  world_objects.cpp
   SPG_Proiect.vcxproj -> D:\Github\OpenGL-Project---Spongebob\SPG_Proiect\x64\Debug\SPG_Proiect.exe
