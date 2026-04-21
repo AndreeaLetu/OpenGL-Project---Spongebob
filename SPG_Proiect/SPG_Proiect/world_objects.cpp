@@ -2,7 +2,7 @@
 #include <freeglut.h>
 #include <cmath>
 #include <vector>
-#include <cstdio> 
+#include <cstdio>
 #include "world_objects.h"
 #include "terrain.h"
 #include "texture.h"
@@ -18,55 +18,43 @@ GLuint signTexture;
 OBJModel pineappleHouse, squidwardHouse, patrickHouse, krustyKrab, signSpongebob;
 OBJModel krustyKrabCar;
 
-
-// animation variables for the car orbiting around the roundabout
 float carOrbitAngle = 0.0f;
 float carOrbitSpeed = 20.0f;
 float carOrbitRadius = 30.0f;
 
-
-//Rendering wavy neon kelp using triangle strips
 void DrawNeonKelp(float x, float z, float h, float off) {
     float yb = GetHeightAt(x, z);
     float t = GetTickCount() * 0.001f;
-
     glPushMatrix();
     glTranslatef(x, yb, z);
     glDisable(GL_TEXTURE_2D);
     glDisable(GL_LIGHTING);
-
- 
     glBegin(GL_TRIANGLE_STRIP);
     for (int i = 0; i <= 8; i++) {
         float f = (float)i / 8.0f;
-        float wv = sin(t * 2.0f + f * 3.0f + off) * 0.5f * f; 
+        float wv = sin(t * 2.0f + f * 3.0f + off) * 0.5f * f;
         glColor3f(0.0f, 0.9f, 0.2f);
         glVertex3f(wv - 0.2f, i * (h / 8.0f), 0);
         glVertex3f(wv + 0.2f, i * (h / 8.0f), 0.1f);
     }
     glEnd();
-
     glEnable(GL_LIGHTING);
     glPopMatrix();
 }
-//Rendering a plant with a cylinder stem and sphere bubbles
+
 void DrawPinkBubblePlant(float x, float z, float h, float off) {
     float yb = GetHeightAt(x, z);
-
     glPushMatrix();
     glTranslatef(x, yb, z);
     glDisable(GL_TEXTURE_2D);
     glDisable(GL_LIGHTING);
-
     glColor3f(0.9f, 0.1f, 0.6f);
-
     glPushMatrix();
     glRotatef(-90, 1, 0, 0);
     GLUquadric* q = gluNewQuadric();
     gluCylinder(q, 0.2f, 0.1f, h, 6, 1);
     gluDeleteQuadric(q);
     glPopMatrix();
-
     for (int i = 1; i <= 4; i++) {
         glPushMatrix();
         float ang = i * 1.5f + off;
@@ -75,20 +63,17 @@ void DrawPinkBubblePlant(float x, float z, float h, float off) {
         glutSolidSphere(0.5f, 8, 8);
         glPopMatrix();
     }
-
     glEnable(GL_LIGHTING);
     glPopMatrix();
 }
-//Renders a spiral animated vine
+
 void DrawCyanVine(float x, float z, float h, float off) {
     float yb = GetHeightAt(x, z);
     float t = GetTickCount() * 0.001f;
-
     glPushMatrix();
     glTranslatef(x, yb, z);
     glDisable(GL_TEXTURE_2D);
     glDisable(GL_LIGHTING);
-
     glLineWidth(4.0f);
     glBegin(GL_LINE_STRIP);
     for (int i = 0; i <= 12; i++) {
@@ -98,104 +83,71 @@ void DrawCyanVine(float x, float z, float h, float off) {
         glVertex3f(cos(ang) * 0.5f * f, i * (h / 12.0f), sin(ang) * 0.5f * f);
     }
     glEnd();
-
     glEnable(GL_LIGHTING);
     glPopMatrix();
 }
 
-//Generating road strips using quad strips, with texture coordinates to create a moving effect
 void DrawRoadStrip(float x1, float z1, float x2, float z2, float w) {
-    float dx = x2 - x1;
-    float dz = z2 - z1;
+    float dx = x2 - x1, dz = z2 - z1;
     float dst = sqrt(dx * dx + dz * dz);
-
     if (dst < 0.1f) return;
-
     float px = -dz / dst * (w / 2.0f);
     float pz = dx / dst * (w / 2.0f);
-
     glEnable(GL_TEXTURE_2D);
     glBindTexture(GL_TEXTURE_2D, roadTexture);
     glDisable(GL_LIGHTING);
     glColor3f(1, 1, 1);
-
     glBegin(GL_QUAD_STRIP);
     for (int i = 0; i <= 10; i++) {
         float t = i / 10.0f;
-        float cx = x1 + t * dx;
-        float cz = z1 + t * dz;
-
-        glTexCoord2f(0, t * 5);
-        glVertex3f(cx - px, GetHeightAt(cx - px, cz - pz) + 0.6f, cz - pz);
-
-        glTexCoord2f(1, t * 5);
-        glVertex3f(cx + px, GetHeightAt(cx + px, cz + pz) + 0.6f, cz + pz);
+        float cx = x1 + t * dx, cz = z1 + t * dz;
+        glTexCoord2f(0, t * 5); glVertex3f(cx - px, GetHeightAt(cx - px, cz - pz) + 0.6f, cz - pz);
+        glTexCoord2f(1, t * 5); glVertex3f(cx + px, GetHeightAt(cx + px, cz + pz) + 0.6f, cz + pz);
     }
     glEnd();
-
     glEnable(GL_LIGHTING);
     glDisable(GL_TEXTURE_2D);
 }
 
-//Rendering a circular road (roundabout)
 void DrawRoundabout(float iR, float oR) {
     glEnable(GL_TEXTURE_2D);
     glBindTexture(GL_TEXTURE_2D, roadTexture);
     glDisable(GL_LIGHTING);
-
     glBegin(GL_QUAD_STRIP);
     for (int i = 0; i <= 60; i++) {
         float a = 2.0f * M_PI * i / 60.0f;
-        float xi = cos(a) * iR;
-        float zi = sin(a) * iR;
-        float xo = cos(a) * oR;
-        float zo = sin(a) * oR;
-
-        glTexCoord2f(0, i / 10.0f);
-        glVertex3f(xi, GetHeightAt(xi, zi) + 0.6f, zi);
-
-        glTexCoord2f(1, i / 10.0f);
-        glVertex3f(xo, GetHeightAt(xo, zo) + 0.6f, zo);
+        float xi = cos(a) * iR, zi = sin(a) * iR;
+        float xo = cos(a) * oR, zo = sin(a) * oR;
+        glTexCoord2f(0, i / 10.0f); glVertex3f(xi, GetHeightAt(xi, zi) + 0.6f, zi);
+        glTexCoord2f(1, i / 10.0f); glVertex3f(xo, GetHeightAt(xo, zo) + 0.6f, zo);
     }
     glEnd();
-
     glEnable(GL_LIGHTING);
     glDisable(GL_TEXTURE_2D);
 }
 
-//Frame-based logic for car position updates
 void UpdateCarMovement() {
     static DWORD lastTime = GetTickCount();
     DWORD currentTime = GetTickCount();
-
     float deltaTime = (currentTime - lastTime) / 1000.0f;
     lastTime = currentTime;
-
     carOrbitAngle += carOrbitSpeed * deltaTime;
-
-    if (carOrbitAngle >= 360.0f)
-        carOrbitAngle -= 360.0f;
-
+    if (carOrbitAngle >= 360.0f) carOrbitAngle -= 360.0f;
     glutPostRedisplay();
 }
 
-//Loading textures and OBJ models into memory
 void InitWorldElements() {
     roadTexture = LoadTexture("road.jpg");
     signTexture = LoadTexture("models/sign/Env_Island_GooLagoon_Panel_01.jpg");
-
     LoadOBJModel("models/pineapple/pineapple.obj", pineappleHouse);
     LoadOBJModel("models/squidward/MSH_SquidwardHouse.obj", squidwardHouse);
     LoadOBJModel("models/patrick/MSH_PatrickHouse.obj", patrickHouse);
     LoadOBJModel("models/krusty/SK_BB_Krusty_Krab.obj", krustyKrab);
     LoadOBJModel("models/sign/Env_GooLagoon_Panel01.obj", signSpongebob);
-
-    if (!LoadOBJModel("models/car/KKCar.obj", krustyKrabCar)) {
+    if (!LoadOBJModel("models/car/KKCar.obj", krustyKrabCar))
         printf("EROARE: KKCar.obj nu a fost gasit!\n");
-    }
 }
 
-//Assembling all road components
 void DrawAllRoads() {
     DrawRoundabout(20, 40);
     DrawRoadStrip(0, 39.5f, 0, 190, 20);
@@ -204,128 +156,192 @@ void DrawAllRoads() {
     DrawRoadStrip(-39.5f, 0, -190, 0, 20);
 }
 
-//Placement check to prevent objects spawning on roads
-bool IsPointOnRoad(float x, float z)
-{
+bool IsPointOnRoad(float x, float z) {
     float dist = sqrt(x * x + z * z);
-    if (dist >= 20.0f && dist <= 40.0f)
-        return true;
-
-    if (z >= 39.5f && z <= 190.0f && fabs(x) <= 10.0f)
-        return true;
-
-    if (z <= -39.5f && z >= -190.0f && fabs(x) <= 10.0f)
-        return true;
-
-    if (x >= 39.5f && x <= 190.0f && fabs(z) <= 10.0f)
-        return true;
-
-    if (x <= -39.5f && x >= -190.0f && fabs(z) <= 10.0f)
-        return true;
-
+    if (dist >= 20.0f && dist <= 40.0f) return true;
+    if (z >= 39.5f && z <= 190.0f && fabs(x) <= 10.0f) return true;
+    if (z <= -39.5f && z >= -190.0f && fabs(x) <= 10.0f) return true;
+    if (x >= 39.5f && x <= 190.0f && fabs(z) <= 10.0f) return true;
+    if (x <= -39.5f && x >= -190.0f && fabs(z) <= 10.0f) return true;
     return false;
 }
 
-
-// Renders a simple shipwreck using cubes and cylinders
-void DrawShipWreck(float x, float z)
-{
+void DrawShipWreck(float x, float z) {
     float y = GetHeightAt(x, z);
-
     glPushMatrix();
     glTranslatef(x, y, z);
-    glRotatef(20.0f, 0, 1, 0);
-    glRotatef(15.0f, 0, 0, 1);
-
-    glDisable(GL_TEXTURE_2D);
-    glDisable(GL_LIGHTING);
-
+    glRotatef(20.0f, 0, 1, 0); glRotatef(15.0f, 0, 0, 1);
+    glDisable(GL_TEXTURE_2D); glDisable(GL_LIGHTING);
     glColor3f(0.45f, 0.25f, 0.10f);
-    glPushMatrix();
-    glScalef(6.0f, 1.6f, 2.5f);
-    glutSolidCube(2.0f);
-    glPopMatrix();
-
+    glPushMatrix(); glScalef(6.0f, 1.6f, 2.5f); glutSolidCube(2.0f); glPopMatrix();
     glColor3f(0.35f, 0.18f, 0.08f);
-    glPushMatrix();
-    glTranslatef(-3.0f, 1.0f, 0.0f);
-    glRotatef(-30.0f, 0, 0, 1);
-    glScalef(3.0f, 0.6f, 2.0f);
-    glutSolidCube(2.0f);
-    glPopMatrix();
-
+    glPushMatrix(); glTranslatef(-3.0f, 1.0f, 0.0f); glRotatef(-30.0f, 0, 0, 1);
+    glScalef(3.0f, 0.6f, 2.0f); glutSolidCube(2.0f); glPopMatrix();
     glColor3f(0.50f, 0.30f, 0.10f);
-    glPushMatrix();
-    glTranslatef(1.0f, 2.5f, 0.0f);
-    glRotatef(-60.0f, 0, 0, 1);
-    GLUquadric* q = gluNewQuadric();
-    glRotatef(-90.0f, 1, 0, 0);
-    gluCylinder(q, 0.15, 0.10, 4.0, 8, 1);
-    gluDeleteQuadric(q);
-    glPopMatrix();
-
+    glPushMatrix(); glTranslatef(1.0f, 2.5f, 0.0f); glRotatef(-60.0f, 0, 0, 1);
+    GLUquadric* q = gluNewQuadric(); glRotatef(-90.0f, 1, 0, 0);
+    gluCylinder(q, 0.15, 0.10, 4.0, 8, 1); gluDeleteQuadric(q); glPopMatrix();
     glPopMatrix();
 }
 
-//Renders a simple anchor 
-void DrawAnchor(float x, float z)
+void DrawAnchor(float x, float z) {
+    float y = GetHeightAt(x, z);
+    glPushMatrix(); glTranslatef(x, y, z);
+    glDisable(GL_TEXTURE_2D); glDisable(GL_LIGHTING);
+    glColor3f(0.2f, 0.2f, 0.25f);
+    GLUquadric* q = gluNewQuadric();
+    glPushMatrix(); glRotatef(-90, 1, 0, 0); gluCylinder(q, 0.15, 0.15, 4.0, 10, 1); glPopMatrix();
+    glPushMatrix(); glTranslatef(0, -0.5f, 0); glutSolidSphere(0.3f, 10, 10); glPopMatrix();
+    glPushMatrix(); glTranslatef(0, 0.5f, 0); glRotatef(45, 0, 0, 1);
+    glScalef(2.0f, 0.2f, 0.2f); glutSolidCube(1.0f); glPopMatrix();
+    gluDeleteQuadric(q); glPopMatrix();
+}
+
+void DrawBrokenPlank(float x, float z, float rotY) {
+    float y = GetHeightAt(x, z);
+    glPushMatrix(); glTranslatef(x, y + 0.15f, z);
+    glRotatef(rotY, 0, 1, 0); glRotatef(-8.0f, 1, 0, 0);
+    glDisable(GL_TEXTURE_2D); glDisable(GL_LIGHTING);
+    glColor3f(0.45f, 0.25f, 0.10f);
+    glScalef(3.0f, 0.2f, 0.8f); glutSolidCube(1.0f);
+    glPopMatrix();
+}
+
+void DrawLightCone(float x, float baseY, float z, float h) {
+    float t = GetTickCount() * 0.002f;
+    float flicker = 0.9f + sin(t) * 0.1f;
+
+    float coneLength = 18.0f;
+    float coneRadius = 6.5f;
+    int steps = 36;
+
+    glDisable(GL_TEXTURE_2D);
+    glDisable(GL_LIGHTING);
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE);
+    glDepthMask(GL_FALSE);
+
+    glPushMatrix();
+
+    glTranslatef(x - (0.85f * 1.5f), baseY + (h + 1.85f) * 1.5f, z);
+
+
+    glRotatef(90.0f, 1, 0, 0);
+
+  
+    glBegin(GL_TRIANGLE_FAN);
+    glColor4f(1.0f, 0.95f, 0.55f, 0.05f * flicker);
+    glVertex3f(0, 0, 0); 
+    for (int i = 0; i <= steps; i++) {
+        float a = 2.0f * M_PI * i / steps;
+        glColor4f(1.0f, 0.95f, 0.55f, 0.0f);
+       
+        glVertex3f(cos(a) * coneRadius, sin(a) * coneRadius, coneLength);
+    }
+    glEnd();
+
+   
+    glBegin(GL_TRIANGLE_FAN);
+    glColor4f(1.0f, 0.98f, 0.7f, 0.12f * flicker);
+    glVertex3f(0, 0, 0);
+    for (int i = 0; i <= steps; i++) {
+        float a = 2.0f * M_PI * i / steps;
+        glColor4f(1.0f, 0.98f, 0.7f, 0.0f);
+        glVertex3f(cos(a) * (coneRadius * 0.4f), sin(a) * (coneRadius * 0.4f), coneLength);
+    }
+    glEnd();
+
+    glPopMatrix();
+    glDepthMask(GL_TRUE);
+    glDisable(GL_BLEND);
+    glEnable(GL_LIGHTING);
+}
+
+void DrawCartoonBench(float x, float z, float rotY)
 {
     float y = GetHeightAt(x, z);
-
     glPushMatrix();
     glTranslatef(x, y, z);
+    glRotatef(rotY, 0, 1, 0);
+    glScalef(1.6f, 1.6f, 1.6f);
 
     glDisable(GL_TEXTURE_2D);
     glDisable(GL_LIGHTING);
 
-    glColor3f(0.2f, 0.2f, 0.25f);
-
-    GLUquadric* q = gluNewQuadric();
-
+    glColor3f(0.15f, 0.75f, 0.25f);
     glPushMatrix();
-    glRotatef(-90, 1, 0, 0);
-    gluCylinder(q, 0.15, 0.15, 4.0, 10, 1);
-    glPopMatrix();
-
-    glPushMatrix();
-    glTranslatef(0, -0.5f, 0);
-    glutSolidSphere(0.3f, 10, 10);
-    glPopMatrix();
-
-    glPushMatrix();
-    glTranslatef(0, 0.5f, 0);
-    glRotatef(45, 0, 0, 1);
-    glScalef(2.0f, 0.2f, 0.2f);
+    glTranslatef(0, 1.0f, 0);
+    glScalef(4.0f, 0.25f, 1.4f);
     glutSolidCube(1.0f);
     glPopMatrix();
+
+    glColor3f(1.0f, 0.85f, 0.0f);
+    glPushMatrix();
+    glTranslatef(0, 1.13f, 0);
+    glScalef(4.1f, 0.08f, 1.5f);
+    glutSolidCube(1.0f);
+    glPopMatrix();
+
+    glColor3f(0.10f, 0.45f, 0.90f);
+    glPushMatrix();
+    glTranslatef(0, 1.75f, -0.55f);
+    glScalef(4.0f, 0.9f, 0.22f);
+    glutSolidCube(1.0f);
+    glPopMatrix();
+
+    glColor3f(1.0f, 0.85f, 0.0f);
+    glPushMatrix();
+    glTranslatef(0, 2.22f, -0.55f);
+    glScalef(4.1f, 0.12f, 0.28f);
+    glutSolidCube(1.0f);
+    glPopMatrix();
+
+    float legX[4] = { -1.6f,-1.6f, 1.6f, 1.6f };
+    float legZ[4] = { -0.5f, 0.5f,-0.5f, 0.5f };
+    GLUquadric* q = gluNewQuadric();
+    for (int i = 0; i < 4; i++) {
+        glColor3f(0.95f, 0.45f, 0.05f);
+        glPushMatrix();
+        glTranslatef(legX[i], 0, legZ[i]);
+        glRotatef(-90, 1, 0, 0);
+        gluCylinder(q, 0.16f, 0.13f, 1.0f, 10, 1);
+        glPopMatrix();
+
+        glColor3f(0.60f, 0.25f, 0.05f);
+        glPushMatrix();
+        glTranslatef(legX[i], 0.05f, legZ[i]);
+        glScalef(1.0f, 0.2f, 1.0f);
+        glutSolidSphere(0.22f, 10, 6);
+        glPopMatrix();
+    }
+
+    glColor3f(0.95f, 0.35f, 0.55f);
+    glPushMatrix();
+    glTranslatef(-2.1f, 1.45f, 0);
+    glScalef(0.22f, 0.65f, 1.4f);
+    glutSolidCube(1.0f);
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslatef(2.1f, 1.45f, 0);
+    glScalef(0.22f, 0.65f, 1.4f);
+    glutSolidCube(1.0f);
+    glPopMatrix();
+
+    glColor3f(1.0f, 1.0f, 0.3f);
+    for (int i = -1; i <= 1; i++) {
+        glPushMatrix();
+        glTranslatef(i * 1.3f, 1.75f, -0.67f);
+        glScalef(0.5f, 0.5f, 0.1f);
+        glutSolidSphere(0.3f, 6, 4);
+        glPopMatrix();
+    }
 
     gluDeleteQuadric(q);
     glPopMatrix();
 }
-//Wood planks scattered on terrain
-void DrawBrokenPlank(float x, float z, float rotY)
-{
-    float y = GetHeightAt(x, z);
-
-    glPushMatrix();
-    glTranslatef(x, y + 0.15f, z);
-    glRotatef(rotY, 0, 1, 0);
-    glRotatef(-8.0f, 1, 0, 0);
-
-    glDisable(GL_TEXTURE_2D);
-    glDisable(GL_LIGHTING);
-
-    glColor3f(0.45f, 0.25f, 0.10f);
-    glScalef(3.0f, 0.2f, 0.8f);
-    glutSolidCube(1.0f);
-
-    glPopMatrix();
-}
-
 
 void DrawStaticObjects() {
-
-    // Houses
     glPushMatrix();
     glTranslatef(-55, GetHeightAt(-55, -25) + 1, -25);
     glScalef(0.02f, 0.02f, 0.02f);
@@ -334,8 +350,7 @@ void DrawStaticObjects() {
 
     glPushMatrix();
     glTranslatef(55, GetHeightAt(55, 25) + 0.2f, 25);
-    glRotatef(180, 0, 1, 0);
-    glScalef(1.2f, 1.2f, 1.2f);
+    glRotatef(180, 0, 1, 0); glScalef(1.2f, 1.2f, 1.2f);
     DrawOBJModel(squidwardHouse);
     glPopMatrix();
 
@@ -351,27 +366,18 @@ void DrawStaticObjects() {
     DrawOBJModel(krustyKrab);
     glPopMatrix();
 
-	// Car orbiting around the roundabout
     glPushMatrix();
     {
         float rad = carOrbitAngle * M_PI / 180.0f;
-
-        float cx = cos(rad) * carOrbitRadius;
-        float cz = sin(rad) * carOrbitRadius;
+        float cx = cos(rad) * carOrbitRadius, cz = sin(rad) * carOrbitRadius;
         float cy = GetHeightAt(cx, cz) + 1.0f;
-
         glTranslatef(cx, cy, cz);
-
-        float dirX = -sin(rad);
-        float dirZ = cos(rad);
+        float dirX = -sin(rad), dirZ = cos(rad);
         float angle = atan2(dirX, dirZ) * 180.0f / M_PI;
-
-        glRotatef(angle + 90.0f, 0.0f, 1.0f, 0.0f);
-        glRotatef(180.0f, 0.0f, 1.0f, 0.0f);
-
+        glRotatef(angle + 90.0f, 0, 1, 0);
+        glRotatef(180.0f, 0, 1, 0);
         glScalef(3.0f, 3.0f, 3.0f);
-        glTranslatef(0.0f, 0.2f, 0.0f);
-
+        glTranslatef(0, 0.2f, 0);
         glDisable(GL_LIGHTING);
         glColor3f(1.0f, 0.6f, 0.1f);
         DrawOBJModel(krustyKrabCar);
@@ -379,14 +385,10 @@ void DrawStaticObjects() {
     }
     glPopMatrix();
 
-
-	//Enviromental objects
     DrawShipWreck(85.0f, 85.0f);
     DrawShipWreck(-95.0f, -70.0f);
     DrawAnchor(92.0f, 80.0f);
     DrawAnchor(-88.0f, -62.0f);
-
-   
 
     DrawBrokenPlank(70.0f, 84.0f, 25.0f);
     DrawBrokenPlank(73.0f, 87.0f, 80.0f);
@@ -395,124 +397,88 @@ void DrawStaticObjects() {
     DrawBrokenPlank(-87.0f, -70.0f, 95.0f);
     DrawBrokenPlank(-91.0f, -73.0f, 10.0f);
 
-    //Procedural random vegetation (Plants)
     srand(42);
     for (int i = 0; i < 60; i++) {
         float rx = (rand() % 300) - 150.0f;
         float rz = (rand() % 300) - 150.0f;
-
-        if (IsPointOnRoad(rx, rz))
-            continue;
-
+        if (IsPointOnRoad(rx, rz)) continue;
         int type = rand() % 3;
-        if (type == 0)
-            DrawNeonKelp(rx, rz, 6.0f, (float)i);
-        else if (type == 1)
-            DrawPinkBubblePlant(rx, rz, 5.0f, (float)i);
-        else
-            DrawCyanVine(rx, rz, 7.0f, (float)i);
+        if (type == 0) DrawNeonKelp(rx, rz, 6.0f, (float)i);
+        else if (type == 1) DrawPinkBubblePlant(rx, rz, 5.0f, (float)i);
+        else              DrawCyanVine(rx, rz, 7.0f, (float)i);
     }
 }
 
-// Renders a stylized marine lamp using cylinders and spheres, with a glowing effect
-void DrawSingleMarineLamp(float x, float z, float h)
-{
+void DrawSingleMarineLamp(float x, float z, float h) {
     float y = GetHeightAt(x, z);
-
     glPushMatrix();
     glTranslatef(x, y, z);
-
-    glEnable(GL_LIGHTING);
-    glDisable(GL_TEXTURE_2D);
+    glScalef(1.5f, 1.5f, 1.5f);
 
     GLUquadric* q = gluNewQuadric();
-
-
+   
     glColor3f(0.0f, 0.65f, 0.85f);
-    glPushMatrix();
-    glRotatef(-90.0f, 1.0f, 0.0f, 0.0f);
-    gluCylinder(q, 0.18f, 0.14f, h, 12, 3);
-    glPopMatrix();
-
-
-    glColor3f(0.05f, 0.20f, 0.45f);
-    glPushMatrix();
-    glTranslatef(0.0f, 0.15f, 0.0f);
-    glutSolidCube(0.8f);
-    glPopMatrix();
-
+    glPushMatrix(); glRotatef(-90, 1, 0, 0);
+    gluCylinder(q, 0.18f, 0.14f, h, 12, 3); glPopMatrix();
 
     glColor3f(0.75f, 0.30f, 0.85f);
     glPushMatrix();
-    glTranslatef(0.0f, h, 0.0f);
-    glRotatef(-25.0f, 0.0f, 0.0f, 1.0f);
-    glRotatef(-90.0f, 1.0f, 0.0f, 0.0f);
+    glTranslatef(0, h, 0);
+    glRotatef(25.0f, 0, 0, 1); 
+    glRotatef(-90.0f, 1, 0, 0);
     gluCylinder(q, 0.08f, 0.06f, 2.0f, 10, 2);
     glPopMatrix();
 
 
-    glColor3f(0.90f, 0.35f, 0.55f);
-    glPushMatrix();
-    glTranslatef(0.8f, h + 1.6f, 0.0f);
-    glutSolidSphere(0.18f, 10, 10);
-    glPopMatrix();
-
-
     glDisable(GL_LIGHTING);
-    glColor3f(1.0f, 0.92f, 0.45f);
+    glColor3f(1.0f, 0.95f, 0.6f);
     glPushMatrix();
-    glTranslatef(1.0f, h + 1.5f, 0.0f);
-    glutSolidSphere(0.35f, 14, 14);
+   
+    glTranslatef(-0.85f, h + 1.85f, 0);
+    glutSolidSphere(0.4f, 16, 16);
     glPopMatrix();
-
-
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE);
-    glColor4f(1.0f, 0.9f, 0.5f, 0.3f);
-    glPushMatrix();
-    glTranslatef(1.0f, h + 1.5f, 0.0f);
-    glutSolidSphere(0.7f, 16, 16);
-    glPopMatrix();
-    glDisable(GL_BLEND);
     glEnable(GL_LIGHTING);
-
-
-    glColor3f(0.35f, 0.10f, 0.45f);
-    glPushMatrix();
-    glTranslatef(1.0f, h + 1.85f, 0.0f);
-    glScalef(1.0f, 0.35f, 1.0f);
-    glutSolidSphere(0.32f, 12, 12);
-    glPopMatrix();
 
     gluDeleteQuadric(q);
     glPopMatrix();
 }
-
-//Position street lamps along the roads
 void DrawStreetLamps()
 {
-    DrawSingleMarineLamp(-12.0f, 75.0f, 9.0f);
-    DrawSingleMarineLamp(12.0f, 75.0f, 9.0f);
-    DrawSingleMarineLamp(-12.0f, 125.0f, 9.0f);
-    DrawSingleMarineLamp(12.0f, 125.0f, 9.0f);
+    float h = 12.0f;
 
-    DrawSingleMarineLamp(-12.0f, -75.0f, 9.0f);
-    DrawSingleMarineLamp(12.0f, -75.0f, 9.0f);
-    DrawSingleMarineLamp(-12.0f, -125.0f, 9.0f);
-    DrawSingleMarineLamp(12.0f, -125.0f, 9.0f);
+    DrawSingleMarineLamp(12.0f, 75.0f, h);
+    DrawLightCone(12.0f, GetHeightAt(12.0f, 75.0f), 75.0f, h);
 
-    DrawSingleMarineLamp(75.0f, -12.0f, 9.0f);
-    DrawSingleMarineLamp(75.0f, 12.0f, 9.0f);
-    DrawSingleMarineLamp(125.0f, -12.0f, 9.0f);
-    DrawSingleMarineLamp(125.0f, 12.0f, 9.0f);
+    DrawCartoonBench(12.0f, 70.0f, 270.0f);
+    DrawCartoonBench(12.0f, 80.0f, 270.0f);
 
-    DrawSingleMarineLamp(-75.0f, -12.0f, 9.0f);
-    DrawSingleMarineLamp(-75.0f, 12.0f, 9.0f);
-    DrawSingleMarineLamp(-125.0f, -12.0f, 9.0f);
-    DrawSingleMarineLamp(-125.0f, 12.0f, 9.0f);
+    DrawSingleMarineLamp(12.0f, 125.0f, h);
+    DrawLightCone(12.0f, GetHeightAt(12.0f, 125.0f), 125.0f, h);
 
-    DrawSingleMarineLamp(-48.0f, 48.0f, 9.0f);
-    DrawSingleMarineLamp(48.0f, 48.0f, 9.0f);
-    DrawSingleMarineLamp(-48.0f, -48.0f, 9.0f);
-    DrawSingleMarineLamp(48.0f, -48.0f, 9.0f);
+    DrawCartoonBench(12.0f, 120.0f, 270.0f);
+    DrawCartoonBench(12.0f, 130.0f, 270.0f);
+
+    DrawSingleMarineLamp(75.0f, -12.0f, h);
+    DrawLightCone(75.0f, GetHeightAt(75.0f, -12.0f), -12.0f, h);
+
+    DrawCartoonBench(70.0f, -12.0f, 0.0f);
+    DrawCartoonBench(80.0f, -12.0f, 0.0f);
+
+    DrawSingleMarineLamp(125.0f, -12.0f, h);
+    DrawLightCone(125.0f, GetHeightAt(125.0f, -12.0f), -12.0f, h);
+
+    DrawCartoonBench(120.0f, -12.0f, 0.0f);
+    DrawCartoonBench(130.0f, -12.0f, 0.0f);
+
+    DrawSingleMarineLamp(-75.0f, 12.0f, h);
+    DrawLightCone(-75.0f, GetHeightAt(-75.0f, 12.0f), 12.0f, h);
+
+    DrawCartoonBench(-70.0f, 12.0f, 180.0f);
+    DrawCartoonBench(-80.0f, 12.0f, 180.0f);
+
+    DrawSingleMarineLamp(-125.0f, 12.0f, h);
+    DrawLightCone(-125.0f, GetHeightAt(-125.0f, 12.0f), 12.0f, h);
+
+    DrawCartoonBench(-120.0f, 12.0f, 180.0f);
+    DrawCartoonBench(-130.0f, 12.0f, 180.0f);
 }

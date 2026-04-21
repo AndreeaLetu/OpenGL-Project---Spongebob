@@ -129,6 +129,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="camera.cpp" />
+    <ClCompile Include="lighting.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="model_loader.cpp" />
     <ClCompile Include="skybox.cpp" />
@@ -138,6 +139,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="camera.h" />
+    <ClInclude Include="lighting.h" />
     <ClInclude Include="model_loader.h" />
     <ClInclude Include="skybox.h" />
     <ClInclude Include="stb_image.h" />

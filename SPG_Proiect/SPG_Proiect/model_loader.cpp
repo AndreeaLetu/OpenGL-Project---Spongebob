@@ -160,7 +160,6 @@ void DrawOBJModel(const OBJModel& model) {
             glDisable(GL_TEXTURE_2D);
             glColor3f(sm.r, sm.g, sm.b);
         }
-
         glBegin(GL_TRIANGLES);
         for (const auto& v : sm.vertices) {
             glTexCoord2f(v.u, v.v);
@@ -168,6 +167,19 @@ void DrawOBJModel(const OBJModel& model) {
         }
         glEnd();
     }
-
     glDisable(GL_TEXTURE_2D);
+}
+
+void DrawOBJModelShadow(const OBJModel& model)
+{
+    if (model.subMeshes.empty()) return;
+    glDisable(GL_TEXTURE_2D);
+    glDisable(GL_LIGHTING);
+    glColor4f(0.1f, 0.1f, 0.1f, 0.5f);
+    for (const auto& sm : model.subMeshes) {
+        glBegin(GL_TRIANGLES);
+        for (const auto& v : sm.vertices)
+            glVertex3f(v.x, v.y, v.z);
+        glEnd();
+    }
 }

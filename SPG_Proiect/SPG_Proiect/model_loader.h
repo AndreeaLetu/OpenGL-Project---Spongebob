@@ -23,3 +23,4 @@ struct OBJModel {
 
 bool LoadOBJModel(const char* filename, OBJModel& outModel);
 void DrawOBJModel(const OBJModel& model);
+void DrawOBJModelShadow(const OBJModel& model);

@@ -81,7 +81,6 @@ float GetHeightAt(float x, float z)
 void DrawTerrain()
 {
     glEnable(GL_TEXTURE_2D);
-    glDisable(GL_LIGHTING);
     glColor3f(1.0f, 1.0f, 1.0f);
     glBindTexture(GL_TEXTURE_2D, sandTexture);
 
@@ -91,11 +90,18 @@ void DrawTerrain()
     glVertexPointer(3, GL_FLOAT, sizeof(TerrainVertex), &terrainData[0].x);
     glTexCoordPointer(2, GL_FLOAT, sizeof(TerrainVertex), &terrainData[0].u);
 
+    // Daca vrei normale pe teren pentru iluminare, adauga campul normal
+    // in structura TerrainVertex si calculeaza-le in GenerateTerrain().
+    // Versiunea simpla: dezactiveaza iluminarea doar pentru teren
+    glDisable(GL_LIGHTING);
+
     for (size_t i = 0; i < rowStart.size(); i++)
-    {
         glDrawArrays(GL_TRIANGLE_STRIP, rowStart[i], rowCount[i]);
-    }
 
     glDisableClientState(GL_VERTEX_ARRAY);
     glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+    glDisable(GL_TEXTURE_2D);
+
+    // Reactive iluminarea pentru restul scenei
+    glEnable(GL_LIGHTING);
 }
