@@ -5,21 +5,21 @@
 GLuint sandTexture;
 
 struct TerrainVertex {
-    float x, y, z; // position in 3d space 
-    float u, v; //position in 2d space 
+    float x, y, z; 
+    float u, v; 
 };
 
 std::vector<TerrainVertex> terrainData;
 std::vector<int> rowStart;
 std::vector<int> rowCount;
 
-std::vector<std::vector<float>> heightGrid; // matrix for heights
+std::vector<std::vector<float>> heightGrid; 
 
 int mapSize = 100;
 float mapScale = 2.0f;
 
 void GenerateTerrain()
-{   //Heightmap
+{
     float texScale = 0.2f;
 
     heightGrid.resize(mapSize * 2 + 1, std::vector<float>(mapSize * 2 + 1, 0.0f));
@@ -90,9 +90,7 @@ void DrawTerrain()
     glVertexPointer(3, GL_FLOAT, sizeof(TerrainVertex), &terrainData[0].x);
     glTexCoordPointer(2, GL_FLOAT, sizeof(TerrainVertex), &terrainData[0].u);
 
-    // Daca vrei normale pe teren pentru iluminare, adauga campul normal
-    // in structura TerrainVertex si calculeaza-le in GenerateTerrain().
-    // Versiunea simpla: dezactiveaza iluminarea doar pentru teren
+   
     glDisable(GL_LIGHTING);
 
     for (size_t i = 0; i < rowStart.size(); i++)
@@ -102,6 +100,6 @@ void DrawTerrain()
     glDisableClientState(GL_TEXTURE_COORD_ARRAY);
     glDisable(GL_TEXTURE_2D);
 
-    // Reactive iluminarea pentru restul scenei
+   
     glEnable(GL_LIGHTING);
 }

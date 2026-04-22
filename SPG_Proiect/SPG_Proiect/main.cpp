@@ -15,7 +15,6 @@
 #define M_PI 3.14159265358979323846f
 #endif
 
-
 static bool IsOnRoad(float x, float z)
 {
     float dist = sqrt(x * x + z * z);
@@ -66,6 +65,22 @@ static void DrawProjectedShadow(float baseX, float baseY, float baseZ, float obj
     EndShadow();
 }
 
+static void DrawProjectedShadowCustomLight(float baseX, float baseZ, float* customLightPos, void(*drawFunc)())
+{
+    if (!shadowsEnabled) return;
+    if (IsOnRoad(baseX, baseZ)) return;
+
+    float mat[16];
+    BuildShadowMatrix(GetHeightAt(baseX, baseZ) + 0.25f, customLightPos, mat);
+
+    BeginShadow();
+    glPushMatrix();
+    glMultMatrixf(mat);
+    drawFunc();
+    glPopMatrix();
+    EndShadow();
+}
+
 static void DrawEllipseShadow(float cx, float cz, float rx, float rz, float alpha)
 {
     if (!shadowsEnabled || lightPos[1] <= 0.0f) return;
@@ -77,19 +92,14 @@ static void DrawEllipseShadow(float cx, float cz, float rx, float rz, float alph
     glVertex3f(cx, groundY, cz);
     for (int i = 0; i <= 32; i++) {
         float angle = 2.0f * (float)M_PI * i / 32;
-        glVertex3f(cx + cos(angle) * rx, GetHeightAt(cx + cos(angle) * rx, cz + sin(angle) * rz) + 0.15f, cz + sin(angle) * rz);
+        float px = cx + cos(angle) * rx;
+        float pz = cz + sin(angle) * rz;
+        glVertex3f(px, GetHeightAt(px, pz) + 0.15f, pz);
     }
     glEnd();
     EndShadow();
 }
-static void DrawPatrickHouseShadowGeom() {
-    glPushMatrix();
-    
-    glTranslatef(-55, GetHeightAt(-55, 25) + 0.1f, 25);
-    glScalef(8, 8, 8); 
-    DrawOBJModelShadow(patrickHouse);
-    glPopMatrix();
-}
+
 
 static void DrawPineappleShadowGeom() {
     glPushMatrix();
@@ -98,7 +108,6 @@ static void DrawPineappleShadowGeom() {
     DrawOBJModelShadow(pineappleHouse);
     glPopMatrix();
 }
-
 static void DrawSquidwardShadowGeom() {
     glPushMatrix();
     glTranslatef(55, GetHeightAt(55, 25) + 0.2f, 25);
@@ -107,7 +116,6 @@ static void DrawSquidwardShadowGeom() {
     DrawOBJModelShadow(squidwardHouse);
     glPopMatrix();
 }
-
 static void DrawKrustyKrabShadowGeom() {
     glPushMatrix();
     glTranslatef(55, GetHeightAt(55, -25) + 0.2f, -25);
@@ -115,15 +123,40 @@ static void DrawKrustyKrabShadowGeom() {
     DrawOBJModelShadow(krustyKrab);
     glPopMatrix();
 }
+static void DrawPatrickHouseShadowGeom() {
+    glPushMatrix();
+    glTranslatef(-55, GetHeightAt(-55, 25) + 0.1f, 25);
+    glScalef(8, 8, 8);
+    DrawOBJModelShadow(patrickHouse);
+    glPopMatrix();
+}
 
+static void DrawSignShadowGeom() {
+    float y = GetHeightAt(60.0f, -30.0f);
+    GLUquadric* q = gluNewQuadric();
+    glPushMatrix();
+    glTranslatef(60.0f, y, -30.0f);
+    glRotatef(-90, 1, 0, 0);
+    gluCylinder(q, 0.15f, 0.12f, 7.0f, 8, 1);
+    glPopMatrix();
+    glPushMatrix();
+    glTranslatef(60.0f, y + 8.5f, -30.0f);
+    glScalef(2.8f, 3.5f, 0.4f);
+    glutSolidSphere(1.0f, 14, 10);
+    glPopMatrix();
+    gluDeleteQuadric(q);
+}
 
 static float g_lampX = 0, g_lampZ = 0;
 static void DrawLampShadowGeom() {
     float y = GetHeightAt(g_lampX, g_lampZ);
     GLUquadric* q = gluNewQuadric();
-    glPushMatrix(); glTranslatef(g_lampX, y, g_lampZ);
+    glPushMatrix();
+    glTranslatef(g_lampX, y, g_lampZ);
     glScalef(1.5f, 1.5f, 1.5f);
-    glRotatef(-90, 1, 0, 0); gluCylinder(q, 0.18f, 0.14f, 12.0f, 8, 1); glPopMatrix();
+    glRotatef(-90, 1, 0, 0);
+    gluCylinder(q, 0.18f, 0.14f, 12.0f, 8, 1);
+    glPopMatrix();
     gluDeleteQuadric(q);
 }
 
@@ -135,29 +168,23 @@ static void DrawBenchShadowGeom() {
     glRotatef(g_benchRot, 0, 1, 0);
     glScalef(1.6f, 1.6f, 1.6f);
     glPushMatrix(); glTranslatef(0, 1.0f, 0); glScalef(4.0f, 0.25f, 1.4f); glutSolidCube(1.0f); glPopMatrix();
-    glPushMatrix(); glTranslatef(0, 1.75f, -0.55f); glScalef(4.0f, 0.9f, 0.22f); glutSolidCube(1.0f); glPopMatrix();
+    glPushMatrix(); glTranslatef(0, 2.5f, -0.55f); glScalef(4.2f, 2.8f, 0.3f); glutSolidCube(1.0f); glPopMatrix();
+    glPushMatrix(); glTranslatef(-2.1f, 1.8f, 0); glScalef(0.25f, 2.2f, 1.4f); glutSolidCube(1.0f); glPopMatrix();
+    glPushMatrix(); glTranslatef(2.1f, 1.8f, 0); glScalef(0.25f, 2.2f, 1.4f); glutSolidCube(1.0f); glPopMatrix();
+    float legX[4] = { -1.6f,-1.6f,1.6f,1.6f }, legZ[4] = { -0.5f, 0.5f,-0.5f,0.5f };
+    GLUquadric* q = gluNewQuadric();
+    for (int i = 0; i < 4; i++) {
+        glPushMatrix(); glTranslatef(legX[i], 0, legZ[i]); glRotatef(-90, 1, 0, 0);
+        gluCylinder(q, 0.16f, 0.13f, 1.0f, 8, 1); glPopMatrix();
+    }
+    gluDeleteQuadric(q);
     glPopMatrix();
 }
+static LampPos g_rightLamps[] = { {12.0f, 75.0f}, {12.0f, 125.0f}, {75.0f, -12.0f}, {125.0f,-12.0f}, {-75.0f, 12.0f}, {-125.0f,12.0f} };
+static BenchInfo g_rightBenches[] = { {12.0f, 70.0f, 270.0f}, {12.0f, 80.0f, 270.0f}, {12.0f, 120.0f, 270.0f}, {12.0f, 130.0f, 270.0f}, { 70.0f,-12.0f, 0.0f}, { 80.0f,-12.0f, 0.0f}, {120.0f,-12.0f, 0.0f}, {130.0f,-12.0f, 0.0f}, {-70.0f, 12.0f, 180.0f}, {-80.0f, 12.0f, 180.0f}, {-120.0f,12.0f, 180.0f}, {-130.0f,12.0f, 180.0f} };
 
-
-struct BenchInfo { float x, z, rotY; };
-static BenchInfo g_rightBenches[] = {
-    {12.0f, 70.0f, 270.0f}, {12.0f, 80.0f, 270.0f},
-    {12.0f, 120.0f, 270.0f}, {12.0f, 130.0f, 270.0f},
-    {70.0f, -12.0f, 0.0f}, {80.0f, -12.0f, 0.0f},
-    {120.0f, -12.0f, 0.0f}, {130.0f, -12.0f, 0.0f},
-    {-70.0f, 12.0f, 180.0f}, {-80.0f, 12.0f, 180.0f},
-    {-120.0f, 12.0f, 180.0f}, {-130.0f, 12.0f, 180.0f}
-};
-
-struct LampPos { float x, z; };
-static LampPos g_rightLamps[] = {
-    {12.0f, 75.0f}, {12.0f, 125.0f},
-    {75.0f, -12.0f}, {125.0f, -12.0f},
-    {-75.0f, 12.0f}, {-125.0f, 12.0f}
-};
-
-static void DrawLampToBenchShadow(float benchX, float benchZ, float benchRot, float lampX, float lampZ) {
+static void DrawLampToBenchShadow(float benchX, float benchZ, float benchRot, float lampX, float lampZ)
+{
     float fakeLightPos[4] = { lampX, 15.0f, lampZ, 1.0f };
     float mat[16];
     BuildShadowMatrix(GetHeightAt(benchX, benchZ) + 0.1f, fakeLightPos, mat);
@@ -171,37 +198,45 @@ static void DrawLampToBenchShadow(float benchX, float benchZ, float benchRot, fl
     EndShadow();
 }
 
-static void DrawAllShadows() {
+static void DrawAllShadows()
+{
     if (!shadowsEnabled || lightPos[1] <= 0.0f) return;
     glClear(GL_STENCIL_BUFFER_BIT);
 
-   
+    
     DrawProjectedShadow(-55, 0, -25, 12.0f, DrawPineappleShadowGeom);
     DrawProjectedShadow(55, 0, 25, 10.0f, DrawSquidwardShadowGeom);
-    DrawProjectedShadow(55, 0, -25, 8.0f, DrawKrustyKrabShadowGeom);
     DrawProjectedShadow(-55, 0, 25, 5.0f, DrawPatrickHouseShadowGeom);
+    {
+        float kkLightPos[4] = { -100.0f, 200.0f, 100.0f, 0.0f };
+        DrawProjectedShadowCustomLight(55.0f, -25.0f, kkLightPos, DrawKrustyKrabShadowGeom);
+    }
 
-  
+   
+    {
+        float signLightPos[4] = { -200.0f, 250.0f, 0.0f, 0.0f };
+        DrawProjectedShadowCustomLight(60.0f, -30.0f, signLightPos, DrawSignShadowGeom);
+    }
+
+    
+    if (shadowsEnabled && lightPos[1] > 0.0f) {
+        BeginShadow();
+        DrawAllPlantsShadowGeom();
+        EndShadow();
+    }
+
+   
     for (auto& lp : g_rightLamps) {
         g_lampX = lp.x; g_lampZ = lp.z;
         DrawProjectedShadow(lp.x, GetHeightAt(lp.x, lp.z), lp.z, 14.0f, DrawLampShadowGeom);
         DrawEllipseShadow(lp.x, lp.z, 2.2f, 2.2f, 0.4f);
     }
 
-
     for (auto& b : g_rightBenches) {
         g_benchX = b.x; g_benchZ = b.z; g_benchRot = b.rotY;
         DrawProjectedShadow(b.x, GetHeightAt(b.x, b.z), b.z, 3.5f, DrawBenchShadowGeom);
-
-        float lX = 0, lZ = 0;
-        if (fabs(b.x) == 12.0f) {
-            lX = b.x;
-            lZ = (b.z < 100.0f && b.z > 0) ? 75.0f : 125.0f;
-        }
-        else {
-            lZ = b.z;
-            lX = (b.x > 0) ? 75.0f : -75.0f;
-        }
+        float lX = (fabs(b.x) == 12.0f) ? b.x : (b.x > 0 ? 75.0f : -75.0f);
+        float lZ = (fabs(b.x) == 12.0f) ? ((b.z > 0 && b.z < 100.0f) ? 75.0f : 125.0f) : b.z;
         DrawLampToBenchShadow(b.x, b.z, b.rotY, lX, lZ);
     }
 }
@@ -212,6 +247,7 @@ void Init() {
     glEnable(GL_FOG); glFogi(GL_FOG_MODE, GL_EXP2);
     GLfloat fogColor[4] = { 0.0f, 0.4f, 0.5f, 1.0f };
     glFogfv(GL_FOG_COLOR, fogColor); glFogf(GL_FOG_DENSITY, 0.005f);
+   
     skyboxTex[0] = LoadTexture("px.png.png"); skyboxTex[1] = LoadTexture("nx.png.png");
     skyboxTex[2] = LoadTexture("py.png.png"); skyboxTex[3] = LoadTexture("ny.png.png");
     skyboxTex[4] = LoadTexture("pz.png.png"); skyboxTex[5] = LoadTexture("nz.png.png");
@@ -222,32 +258,72 @@ void Init() {
 void Display() {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
     glLoadIdentity();
-    float dirX = cos(yaw * (float)M_PI / 180.0f) * cos(pitch * (float)M_PI / 180.0f);
-    float dirY = sin(pitch * (float)M_PI / 180.0f);
-    float dirZ = sin(yaw * (float)M_PI / 180.0f) * cos(pitch * (float)M_PI / 180.0f);
-    gluLookAt(camPosX, camPosY, camPosZ, camPosX + dirX, camPosY + dirY, camPosZ + dirZ, 0, 1, 0);
-    SetupLighting(); SetupLampLights();
+
+    if (followBoat) {
+
+        float rad = (boatAngle - 180.0f) * (float)M_PI / 180.0f;
+        float camDist  = 25.0f;
+        float camHeight = 12.0f;
+        float fcX = boatPosX - sin(rad) * camDist;
+        float fcY = boatPosY + camHeight;
+        float fcZ = boatPosZ - cos(rad) * camDist;
+        float tX = boatPosX + sin(rad) * 8.0f;
+        float tY = boatPosY + 2.0f;
+        float tZ = boatPosZ + cos(rad) * 8.0f;
+        gluLookAt(fcX, fcY, fcZ, tX, tY, tZ, 0, 1, 0);
+    }
+   else {
+    float rad = sbAngle * (float)M_PI / 180.0f;
+    float camDist  = 30.0f;
+    float camHeight = 15.0f;
+
+    float fcX = sbPosX - sin(rad) * camDist;
+    float fcY = sbPosY + camHeight;
+    float fcZ = sbPosZ - cos(rad) * camDist;
+
+    float tX = sbPosX;
+    float tY = sbPosY + 3.0f;
+    float tZ = sbPosZ;
+
+    gluLookAt(fcX, fcY, fcZ, tX, tY, tZ, 0, 1, 0);
+}
+
+    SetupLighting(); SetupLampLights(); DrawBubbles();
 
     glPushMatrix();
-    float matrix[16]; glGetFloatv(GL_MODELVIEW_MATRIX, matrix);
-    matrix[12] = matrix[13] = matrix[14] = 0; glLoadMatrixf(matrix);
-    DrawSkybox(600.0f); glPopMatrix();
+    float matrix[16];
+    glGetFloatv(GL_MODELVIEW_MATRIX, matrix);
+    matrix[12] = matrix[13] = matrix[14] = 0;
+    glLoadMatrixf(matrix);
+    DrawSkybox(600.0f);
+    glPopMatrix();
 
     DrawTerrain();
     DrawAllShadows();
 
     glDisable(GL_BLEND); glDisable(GL_STENCIL_TEST);
-    DrawAllRoads(); DrawStaticObjects(); DrawStreetLamps();
+    glEnable(GL_TEXTURE_2D); glEnable(GL_DEPTH_TEST);
+
+    DrawAllRoads();
+    DrawStaticObjects();
+    DrawStreetLamps();
+    DrawControlledBoat();
+    DrawSpongebob();
+    DrawBubbles();
+
     glutSwapBuffers();
 }
 
 void Reshape(int w, int h) {
-    if (h == 0) h = 1; glViewport(0, 0, w, h);
+    if (h == 0) h = 1;
+    glViewport(0, 0, w, h);
     glMatrixMode(GL_PROJECTION); glLoadIdentity();
-    gluPerspective(60.0, (double)w / h, 1.0, 1000.0); glMatrixMode(GL_MODELVIEW);
+    gluPerspective(60.0, (double)w / h, 1.0, 1000.0);
+    glMatrixMode(GL_MODELVIEW);
 }
 
-void IdleFunc() { UpdateCarMovement(); glutPostRedisplay(); }
+void IdleFunc() { UpdateCarMovement(); glutPostRedisplay();   UpdateBoat(); UpdateSpongebob(); UpdateBubbles();
+}
 
 int main(int argc, char** argv) {
     glutInit(&argc, argv);
@@ -257,7 +333,7 @@ int main(int argc, char** argv) {
     Init();
     glutDisplayFunc(Display); glutReshapeFunc(Reshape);
     glutKeyboardFunc(Keyboard); glutMouseFunc(MouseClick);
-    glutMotionFunc(MouseMotion); glutIdleFunc(IdleFunc);
+    glutMotionFunc(MouseMotion); glutSpecialFunc(SpecialKeys); glutIdleFunc(IdleFunc);
     glutMainLoop();
     return 0;
 }
